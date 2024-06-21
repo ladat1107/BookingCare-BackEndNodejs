@@ -2,6 +2,7 @@ import express from "express";
 import homeContronller from "../controllers/homeContronller";
 import userController from "../controllers/userController";
 import allCodeController from "../controllers/allCodeController";
+import doctorController from "../controllers/doctorController";
 require("dotenv").config();
 
 let router = express.Router();
@@ -25,7 +26,10 @@ let initWebRoutes = (app) => {
 
     router.get("/api/get-all-code", allCodeController.getAllCode);
 
-
+    router.get("/api/get-top-doctor",doctorController.getTopDoctor)
+    router.get("/api/get-all-doctor",doctorController.getAllDoctor)
+    router.post("/api/create-page-doctor",doctorController.createPageDoctor)
+    router.get("/api/get-doctor-mardown",doctorController.getDoctorMardown)
 
     return app.use("/", router);
 }
