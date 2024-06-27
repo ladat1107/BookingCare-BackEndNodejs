@@ -40,7 +40,7 @@ let getAllDoctor = async (req, res) => {
 let createPageDoctor = async (req, res) => {
     try {
         let data = req.body;
-        if (!data || !data.htmlContent || !data.markDownContent || !data.doctorId || !data.clinicId || !data.specialtyId || !data.action) {
+        if (!data || !data.htmlContent || !data.markDownContent || !data.doctorId || !data.action) {
             return res.status(400).json({
                 errCode: 400,
                 message: "Input is Empty!"
@@ -89,9 +89,59 @@ let getDoctorMardown = async (req, res) => {
     }
 }
 
+let createSchedule = async (req, res) => {
+    try {
+        let data = req.body;
+        if (data && data.length > 0) {
+            let response = await doctorService.createScheduleService(data);
+            return res.status(200).json({
+                errCode: response.errCode,
+                message: response.message,
+            });
+        } else {
+            return res.status(400).json({
+                errCode: 400,
+                message: "Input is Empty!"
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            errCode: 500,
+            message: "error from server"
+        })
+    }
+}
+let getScheduleDoctorByDate = async (req, res) => {
+    try {
+        let data = req.query;
+        if (data && data.doctorId && data.date) {
+            let response = await doctorService.getScheduleDoctorByDateService(data);
+            return res.status(200).json({
+                errCode: response.errCode,
+                message: response.message,
+                data: response.schedule,
+            });
+        } else {
+            return res.status(400).json({
+                errCode: 400,
+                message: "Input is Empty!"
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            errCode: 500,
+            message: "error from server"
+        })
+    }
+}
+
 module.exports = {
     getTopDoctor: getTopDoctor,
     getAllDoctor: getAllDoctor,
     createPageDoctor: createPageDoctor,
     getDoctorMardown: getDoctorMardown,
+    createSchedule: createSchedule,
+    getScheduleDoctorByDate: getScheduleDoctorByDate,
 } 

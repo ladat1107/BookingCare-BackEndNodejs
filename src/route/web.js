@@ -3,6 +3,8 @@ import homeContronller from "../controllers/homeContronller";
 import userController from "../controllers/userController";
 import allCodeController from "../controllers/allCodeController";
 import doctorController from "../controllers/doctorController";
+import bookingController from "../controllers/bookingController";
+import specialtyController from "../controllers/specialtyController";
 require("dotenv").config();
 
 let router = express.Router();
@@ -26,12 +28,26 @@ let initWebRoutes = (app) => {
 
     router.get("/api/get-all-code", allCodeController.getAllCode);
 
-    router.get("/api/get-top-doctor",doctorController.getTopDoctor)
-    router.get("/api/get-all-doctor",doctorController.getAllDoctor)
-    router.post("/api/create-page-doctor",doctorController.createPageDoctor)
-    router.get("/api/get-doctor-mardown",doctorController.getDoctorMardown)
+    router.get("/api/get-top-doctor", doctorController.getTopDoctor)
+    router.get("/api/get-all-doctor", doctorController.getAllDoctor)
+    router.post("/api/create-page-doctor", doctorController.createPageDoctor)
+    router.get("/api/get-doctor-mardown", doctorController.getDoctorMardown)
+
+    router.post("/api/create-schedule-doctor", doctorController.createSchedule)
+    router.get("/api/get-schedule-doctor", doctorController.getScheduleDoctorByDate)
+
+
+    router.post("/api/create-appointment-doctor", bookingController.createAppointmentForUser)
+    router.put("/api/confirm-schedule-doctor", bookingController.confirmSchedule)
+
+    router.post("/api/create-page-specialty", specialtyController.handleUpSertSpecialty)
+    router.get("/api/get-specialty-doctor", specialtyController.handleGetSpecialtyDoctorInfo)
+    router.get("/api/get-specialty-admin-manager", specialtyController.handleGetSpecial)
+    router.get("/api/get-one-specialty-admin-manager", specialtyController.handleGetSpecialtyById)
+    router.put(`/api/update-page-specialty`, specialtyController.handleUpdateSpecialty);
+    router.post("/api/delete-page-specialty", specialtyController.handleDeleteSpecialty)
 
     return app.use("/", router);
 }
-
+//npx sequelize-cli db:migrate
 module.exports = initWebRoutes;
