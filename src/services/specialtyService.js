@@ -2,6 +2,7 @@ import _, { includes, reject } from "lodash"
 import db from "../models/index"
 import specialty from "../models/specialty";
 import { name } from "ejs";
+import { where } from "sequelize";
 
 let isDigit = (char) => {
     return !isNaN(char) && !isNaN(parseFloat(char));
@@ -86,8 +87,9 @@ let handleGetSpecialtyDoctorInfo = (specialtyId) => {
     return new Promise(async (resolve, reject) => {
         try {
             console.log("check specialty: ", specialtyId);
-            if (specialtyId == "ALL") {
-                let specialty = await db.specialty.findAll({
+            if (specialtyId) {
+                let specialty = await db.specialty.findOne({
+                    where: { id: specialtyId },
                     attributes: {
                         exclude: ["createdAt", "updatedAt"]
                     },
@@ -105,6 +107,11 @@ let handleGetSpecialtyDoctorInfo = (specialtyId) => {
                                     model: db.User, attributes: {
                                         exclude: ["createdAt", "updatedAt", "password"]
                                     },
+                                    include: [
+                                        { model: db.Markdown, attributes: ["description", "markDownContent", "htmlContent", "doctorId"] },
+                                        { model: db.allcodes, as: "positionData", attributes: ["valueEn", "valueVi"] },
+                                        { model: db.allcodes, as: "roleData", attributes: ["valueEn", "valueVi"] },
+                                    ]
                                 }
                             ],
                             raw: false,
@@ -122,26 +129,22 @@ let handleGetSpecialtyDoctorInfo = (specialtyId) => {
                 })
                 if (specialty) {
                     resolve({
-                        errCode: 200,
+                        errCode: 201,
                         message: "OK",
                         data: specialty,
                     })
                 } else {
                     resolve({
-                        errCode: 201,
+                        errCode: 404,
                         message: "Specialty not found",
                     })
                 }
-            }
-
-            else {
+            } else {
                 resolve({
-                    errCode: 201,
-                    message: "find one",
+                    errCode: 404,
+                    message: "Specialty not found",
                 })
             }
-
-
         } catch (error) {
             reject(error);
         }
@@ -190,7 +193,7 @@ let handleGetAllSpecialService = () => {
     return new Promise(async (resolve, reject) => {
         try {
             let specialty = await db.specialty.findAll({
-                attributes: { exclude: ["image", "createdAt", "updatedAt", "description"] },
+                attributes: { exclude: ["createdAt", "updatedAt", "description"] },
                 raw: true,
                 nest: true,
             })

@@ -112,6 +112,7 @@ let createPageDoctorService = (data) => {
                             markDownContent: data.markDownContent,
                             description: data.description,
                             doctorId: data.doctorId,
+
                         })
                     } else {
                         await db.Markdown.update({
@@ -119,6 +120,7 @@ let createPageDoctorService = (data) => {
                             markDownContent: data.markDownContent,
                             description: data.description,
                             doctorId: data.doctorId,
+
                         }, {
                             where: {
                                 doctorId: data.doctorId,
@@ -136,6 +138,8 @@ let createPageDoctorService = (data) => {
                             paymentId: data.paymentId,
                             provinceId: data.provinceId,
                             priceId: data.priceId,
+                            specialtyId: data.specialtyId ? data.specialtyId : '',
+                            clinicId: data.clinicId ? data.clinicId : '',
                         }, {
                             where: {
                                 doctorId: data.doctorId,
@@ -150,6 +154,8 @@ let createPageDoctorService = (data) => {
                             provinceId: data.provinceId,
                             priceId: data.priceId,
                             doctorId: data.doctorId,
+                            specialtyId: data.specialtyId ? data.specialtyId : '',
+                            clinicId: data.clinicId ? data.clinicId : '',
                         })
                     }
                     resolve({
@@ -189,6 +195,7 @@ let getDoctorMardownService = (doctorId) => {
                             { model: db.allcodes, as: "priceData", attributes: ["valueEn", "valueVi"] },
                             { model: db.allcodes, as: "provinceData", attributes: ["valueEn", "valueVi"] },
                             { model: db.allcodes, as: "paymentData", attributes: ["valueEn", "valueVi"] },
+                            { model: db.specialty, as: "specialtyData", attributes: ["name", "id"] },
                         ],
                         raw: true,
                         nest: true,
