@@ -196,6 +196,7 @@ let getDoctorMardownService = (doctorId) => {
                             { model: db.allcodes, as: "provinceData", attributes: ["valueEn", "valueVi"] },
                             { model: db.allcodes, as: "paymentData", attributes: ["valueEn", "valueVi"] },
                             { model: db.specialty, as: "specialtyData", attributes: ["name", "id"] },
+                            { model: db.clinic, as: "clinicData", attributes: ["name", "id"] },
                         ],
                         raw: true,
                         nest: true,

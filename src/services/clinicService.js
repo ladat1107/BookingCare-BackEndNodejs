@@ -1,29 +1,30 @@
 import _, { includes, reject } from "lodash"
 import db from "../models/index"
-import specialty from "../models/specialty";
+import clinic from "../models/clinic";
 import { name } from "ejs";
 import { where } from "sequelize";
 
 let isDigit = (char) => {
     return !isNaN(char) && !isNaN(parseFloat(char));
 }
-let handleUpSertSpecialty = (data) => {
+let handleUpSertClinic = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             console.log("check data: ", data);
-            let [specialty, createSpecilty] = await db.specialty.findOrCreate({
-                where: { name: data.nameSpecialty },
+            let [clinic, createClinic] = await db.clinic.findOrCreate({
+                where: { name: data.nameClinic },
                 defaults: {
-                    name: data.nameSpecialty,
+                    name: data.nameClinic,
                     image: data.image,
+                    address: data.address,
                 },
                 raw: true,
             })
-            if (createSpecilty) {
+            if (createClinic) {
                 await db.Markdown.create({
                     htmlContent: data.htmlContent,
                     markDownContent: data.markDownContent,
-                    specialtyId: specialty.id,
+                    clinicId: clinic.id,
                 })
                 resolve({
                     errCode: 200,
@@ -32,7 +33,7 @@ let handleUpSertSpecialty = (data) => {
             } else {
                 resolve({
                     errCode: 201,
-                    message: "Specialty already exists",
+                    message: "Clinic already exists",
                 })
             }
 
@@ -41,22 +42,23 @@ let handleUpSertSpecialty = (data) => {
         }
     })
 }
-let handleUpdateSpecialty = (data) => {
+let handleUpdateClinic = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let specialty = await db.specialty.findOne({
+            let clinic = await db.clinic.findOne({
                 where: {
-                    id: data.specialtyId,
+                    id: data.clinicId,
                 },
                 raw: true,
             })
-            if (specialty) {
-                await db.specialty.update({
-                    name: data.nameSpecialty,
+            if (clinic) {
+                await db.clinic.update({
+                    name: data.nameClinic,
                     image: data.image,
+                    address: data.address,
                 }, {
                     where: {
-                        id: data.specialtyId,
+                        id: data.clinicId,
                     }
                 })
                 await db.Markdown.update({
@@ -64,7 +66,7 @@ let handleUpdateSpecialty = (data) => {
                     markDownContent: data.markDownContent,
                 }, {
                     where: {
-                        specialtyId: data.specialtyId,
+                        clinicId: data.clinicId,
                     }
                 })
                 resolve({
@@ -74,7 +76,7 @@ let handleUpdateSpecialty = (data) => {
             } else {
                 resolve({
                     errCode: 201,
-                    message: "Specialty not exists",
+                    message: "Clinic not exists",
                 })
             }
 
@@ -83,19 +85,19 @@ let handleUpdateSpecialty = (data) => {
         }
     })
 }
-let handleGetSpecialtyDoctorInfo = (specialtyId) => {
+let handleGetClinicDoctorInfo = (clinicId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log("check specialty: ", specialtyId);
-            if (specialtyId) {
-                let specialty = await db.specialty.findOne({
-                    where: { id: specialtyId },
+            console.log("check clinic: ", clinicId);
+            if (clinicId) {
+                let clinic = await db.clinic.findOne({
+                    where: { id: clinicId },
                     attributes: {
                         exclude: ["createdAt", "updatedAt"]
                     },
                     include: [
                         {
-                            model: db.Doctor_info, as: "specialtyData",
+                            model: db.Doctor_info, as: "clinicData",
                             attributes: {
                                 exclude: ["createdAt", "updatedAt"]
                             },
@@ -120,7 +122,7 @@ let handleGetSpecialtyDoctorInfo = (specialtyId) => {
                                                 { model: db.allcodes, as: "priceData", attributes: ["valueEn", "valueVi"] },
                                                 { model: db.allcodes, as: "provinceData", attributes: ["valueEn", "valueVi"] },
                                                 { model: db.allcodes, as: "paymentData", attributes: ["valueEn", "valueVi"] },
-                                                { model: db.specialty, as: "specialtyData", attributes: ["name", "id"] },
+                                                { model: db.clinic, as: "clinicData", attributes: ["name", "id", "address"] },
                                             ],
                                             raw: true,
                                             nest: true,
@@ -143,22 +145,22 @@ let handleGetSpecialtyDoctorInfo = (specialtyId) => {
                     raw: false,
                     nest: true,
                 })
-                if (specialty) {
+                if (clinic) {
                     resolve({
                         errCode: 201,
                         message: "OK",
-                        data: specialty,
+                        data: clinic,
                     })
                 } else {
                     resolve({
                         errCode: 404,
-                        message: "Specialty not found",
+                        message: "Clinic not found",
                     })
                 }
             } else {
                 resolve({
                     errCode: 404,
-                    message: "Specialty not found",
+                    message: "Clinic not found",
                 })
             }
         } catch (error) {
@@ -166,12 +168,12 @@ let handleGetSpecialtyDoctorInfo = (specialtyId) => {
         }
     })
 }
-let handleGetSpecialService = (specialtyId) => {
+let handleGetClinicService = (clinicId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (isDigit(specialtyId)) {
-                let specialty = await db.specialty.findOne({
-                    where: { id: +specialtyId },
+            if (isDigit(clinicId)) {
+                let clinic = await db.clinic.findOne({
+                    where: { id: +clinicId },
                     include: [
                         {
                             model: db.Markdown, attributes: { exclude: ["id", "createdAt", "updatedAt", "description"] },
@@ -180,23 +182,23 @@ let handleGetSpecialService = (specialtyId) => {
                     raw: true,
                     nest: true,
                 })
-                if (specialty) {
+                if (clinic) {
                     resolve({
                         errCode: 200,
                         message: "OK",
-                        data: specialty,
+                        data: clinic,
                     })
                 } else {
                     resolve({
                         errCode: 404,
-                        message: "No specialties found",
+                        message: "No clinices found",
                         data: [],
                     })
                 }
             } else {
                 resolve({
                     errCode: 404,
-                    message: "No specialties found",
+                    message: "No clinices found",
                     data: [],
                 })
             }
@@ -205,24 +207,24 @@ let handleGetSpecialService = (specialtyId) => {
         }
     })
 }
-let handleGetAllSpecialService = () => {
+let handleGetAllClinicService = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            let specialty = await db.specialty.findAll({
+            let clinic = await db.clinic.findAll({
                 attributes: { exclude: ["createdAt", "updatedAt", "description"] },
                 raw: true,
                 nest: true,
             })
-            if (specialty) {
+            if (clinic) {
                 resolve({
                     errCode: 200,
                     message: "OK",
-                    data: specialty,
+                    data: clinic,
                 })
             } else {
                 resolve({
                     errCode: 404,
-                    message: "No specialties found",
+                    message: "No clinices found",
                     data: [],
                 })
             }
@@ -232,20 +234,20 @@ let handleGetAllSpecialService = () => {
         }
     })
 }
-let handleDeleteSpecialtyService = (data) => {
+let handleDeleteClinicService = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             console.log("check data: ", data);
-            let result = await db.specialty.destroy({
+            let result = await db.clinic.destroy({
                 where: {
-                    id: data.specialtyId,
-                    name: data.nameSpecialty,
+                    id: data.clinicId,
+                    name: data.nameClinic,
                 },
             });
             if (result) {
-                await db.specialty.destroy({
+                await db.clinic.destroy({
                     where: {
-                        id: data.specialtyId,
+                        id: data.clinicId,
                     }
                 })
                 resolve({
@@ -255,7 +257,7 @@ let handleDeleteSpecialtyService = (data) => {
             } else {
                 resolve({
                     errCode: 201,
-                    message: "Deleting specialty " + data.nameSpecialty + " failed",
+                    message: "Deleting clinic " + data.nameClinic + " failed",
                 })
             }
 
@@ -265,10 +267,10 @@ let handleDeleteSpecialtyService = (data) => {
     })
 }
 module.exports = {
-    handleUpSertSpecialty: handleUpSertSpecialty,
-    handleGetSpecialtyDoctorInfo: handleGetSpecialtyDoctorInfo,
-    handleGetSpecialService: handleGetSpecialService,
-    handleGetAllSpecialService: handleGetAllSpecialService,
-    handleUpdateSpecialty: handleUpdateSpecialty,
-    handleDeleteSpecialtyService: handleDeleteSpecialtyService,
+    handleUpSertClinic: handleUpSertClinic,
+    handleGetClinicDoctorInfo: handleGetClinicDoctorInfo,
+    handleGetClinicService: handleGetClinicService,
+    handleGetAllClinicService: handleGetAllClinicService,
+    handleUpdateClinic: handleUpdateClinic,
+    handleDeleteClinicService: handleDeleteClinicService,
 }

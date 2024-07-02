@@ -5,6 +5,7 @@ import allCodeController from "../controllers/allCodeController";
 import doctorController from "../controllers/doctorController";
 import bookingController from "../controllers/bookingController";
 import specialtyController from "../controllers/specialtyController";
+import clinicController from "../controllers/clinicController";
 require("dotenv").config();
 
 let router = express.Router();
@@ -45,7 +46,15 @@ let initWebRoutes = (app) => {
     router.get("/api/get-specialty-admin-manager", specialtyController.handleGetSpecial)
     router.get("/api/get-one-specialty-admin-manager", specialtyController.handleGetSpecialtyById)
     router.put(`/api/update-page-specialty`, specialtyController.handleUpdateSpecialty);
-    router.post("/api/delete-page-specialty", specialtyController.handleDeleteSpecialty)
+    router.post("/api/delete-page-specialty", specialtyController.handleDeleteSpecialty);
+
+    router.post("/api/create-page-clinic", clinicController.handleUpSertClinic);
+    router.get("/api/get-clinic-doctor", clinicController.handleGetClinicDoctorInfo)
+    router.get("/api/get-clinic-admin-manager", clinicController.handleGetClinic)
+    router.get("/api/get-one-clinic-admin-manager", clinicController.handleGetClinicById)
+    router.put(`/api/update-page-clinic`, clinicController.handleUpdateClinic);
+    router.post("/api/delete-page-clinic", clinicController.handleDeleteClinic);
+
 
     return app.use("/", router);
 }
