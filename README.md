@@ -1,68 +1,94 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# BookingCare Website Backend
 
-## Available Scripts
+## Introduction
 
-In the project directory, you can run:
+BookingCare is a comprehensive healthcare booking system designed to simplify the process of scheduling medical appointments. This system provides a platform for users to book appointments with doctors, receive confirmation emails, and supports multilingual functionality (English and Vietnamese). Administrators have extensive control over the system, including user management, doctor management, schedule management, specialty management, and clinic management.
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Admin Features
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+- **User Management**: Admins can manage all users within the system, including creating, updating, and deleting user accounts.
+- **Doctor Management**: Admins can manage doctor profiles, ensuring that all information is up-to-date and accurate.
+- **Schedule Management**: Admins can set and manage the working schedules of doctors, allowing for efficient time management and appointment scheduling.
+- **Specialty Management**: Admins can manage medical specialties, ensuring that users can easily find the right type of care.
+- **Clinic Management**: Admins can manage clinic information, ensuring that users have access to up-to-date clinic details.
 
-### `npm test`
+### User Features
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Appointment Booking**: Users can book medical appointments with doctors based on availability and specialization.
+- **Email Confirmation**: Upon booking an appointment, users receive a confirmation email with the details of their appointment.
+- **Multilingual Support**: The system supports both English and Vietnamese, allowing users to choose their preferred language.
 
-### `npm run build`
+## Getting Started
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Ensure you have the following installed on your system:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Node.js
+- npm
+- Sequelize
 
-### `npm run eject`
+### Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/ladat1107/BookingCare_BackEndNodejs.git
+    ```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. Navigate to the project directory:
+    ```bash
+    cd bookingCare
+    ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+3. Install the dependencies:
+    ```bash
+    npm install
+    ```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+4. Configure the environment variables:
+    Create a `.env` file in the root directory and add your password MySql, email, password and any other necessary environment variables.
 
-## Learn More
+5. Start the application:
+    ```bash
+    npm start
+    ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Usage
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+After starting the application, you can access it via your web browser at `http://localhost:3000`. Admins can log in with their credentials to access the admin panel, while users can sign up or log in to book appointments.
 
-### Code Splitting
+## Contributing
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+We welcome contributions to the BookingCare project. To contribute, please follow these steps:
 
-### Analyzing the Bundle Size
+1. Fork the repository.
+2. Create a new branch:
+    ```bash
+    git checkout -b feature-branch
+    ```
+3. Make your changes and commit them:
+    ```bash
+    git commit -m 'Add some feature'
+    ```
+4. Push to the branch:
+    ```bash
+    git push origin feature-branch
+    ```
+5. Create a new Pull Request.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+## License
 
-### Making a Progressive Web App
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+## Contact
 
-### Advanced Configuration
+For any questions or issues, please contact [https://www.facebook.com/profile.php?id=100048554478682].
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+---
 
-### Deployment
+Thank you for using BookingCare! We hope this system helps streamline your healthcare appointment booking process.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+![img](https://github.com/ladat1107/PublishImage/blob/main/BookingCare/Home/BookingCare.png?raw=true)
 
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
