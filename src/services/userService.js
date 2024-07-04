@@ -22,7 +22,7 @@ let handleLoginService = async (emailUser, passwordUser) => {
             let userData = {};
             if (checkEmailExist(emailUser)) {
                 let user = await db.User.findOne({
-                    attributes: ["email", "roleId", "password"],
+                    attributes: ["email", "roleId", "password", "firstName", "lastName"],
                     where: { email: emailUser },
                     raw: true,
                 });
@@ -91,7 +91,6 @@ let getUser = async (userId) => {
                     attributes: {
                         exclude: ["password"]
                     }
-
                 })
                 if (!user) {
                     userData.errCode = 2;
@@ -131,8 +130,10 @@ let createUser = async (data) => {
                     firstName: data.firstName,
                     address: data.address,
                     phoneNumber: data.phoneNumber,
-                    gender: data.gender === "1" ? true : false,
+                    gender: data.gender,
                     roleId: data.roleId,
+                    positionId: data.positionId,
+                    image: data.image,
                 })
                 reslove({
                     errCode: 0,
@@ -183,8 +184,10 @@ let putUpdateUser = async (data) => {
                 user.firstName = data.firstName;
                 user.address = data.address;
                 user.phoneNumber = data.phoneNumber;
-                user.gender = data.gender === "1" ? true : false;
+                user.gender = data.gender;
                 user.roleId = data.roleId;
+                user.positionId = data.positionId;
+                user.image = data.image;
                 await db.User.update(user, {
                     where: { id: user.id }
                 })

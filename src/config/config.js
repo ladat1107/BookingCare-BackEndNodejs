@@ -1,17 +1,20 @@
+require('dotenv').config();
+module.export =
 {
   "development": {
-    "username": "root",
-    "password": "1262003",
-    "database": "testdb",
-    "host": "127.0.0.1",
-    "dialect": "mysql",
+    "username": process.env.DB_USERNAME,
+    "password": process.env.DB_PASSWORD,
+    "database": process.env.DN_NAME,
+    "host": process.env.HOST,
+    "port": process.env.DB_PORT,
+    "dialect": process.env.DB_DIALECT,
     "logging": false,
     "dialectOptions": {
       "useUTC": false
     },
     "timezone": "+07:00",
     "query": {
-      "raw": true
+      "raw": true,
     }
   },
   "test": {
